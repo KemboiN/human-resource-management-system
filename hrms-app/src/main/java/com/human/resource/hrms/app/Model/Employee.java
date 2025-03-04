@@ -7,7 +7,9 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "employees")
@@ -24,7 +26,7 @@ public class Employee
     private String fullName;
     private String idNumber;
     private String employmentType;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)       // Store the enum as a String in database
     private Gender gender;
     private String password;
     private String department;
@@ -38,6 +40,10 @@ public class Employee
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL,orphanRemoval = true)
     @Builder.Default //ensuring contactInfo is always initialized
     private List<ContactInfo>contactInfo= new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "employeeRole" , joinColumns = @JoinColumn(name="employeeId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId"))
+    private Set<Role> roles=new HashSet<>();
 
 
 
